@@ -3,8 +3,8 @@ import java.util.Random;
 class EmployeeWageBuilder {
     public static void main(String[] args) {
         System.out.println("Welcome to Employee Wage Computation Program");
-        int employeePresent = 1;
-        int partTimeEmployee = 2;
+        final int employeePresent = 1;
+        final int partTimeEmployee = 2;
         int wagePerHour = 20;
         int fullDayHour = 8;
         int partTimeHour = 8;
@@ -14,13 +14,22 @@ class EmployeeWageBuilder {
 
         Random random = new Random();
         int employeeCheck = random.nextInt(3);
-        if (employeePresent == employeeCheck) {
-            System.out.println("Employee is Present");
-            employeeHours = fullDayHour;
-        } else if (partTimeEmployee == employeeCheck) {
-            employeeHours = partTimeHour;
-        } else {
-            System.out.println("Employee is Absent");
+
+        switch (employeeCheck) {
+            case employeePresent -> {
+                System.out.println("Employee is Full-Time");
+                employeeHours = fullDayHour;
+            }
+                
+            case partTimeEmployee -> {
+                System.out.println("Employee is Part-Time");
+                employeeHours = partTimeHour;
+            }
+            
+            default -> {
+                System.out.println("Employee is Absent");
+                employeeHours = 0;
+            }
         }
 
         employeeWage = employeeHours * wagePerHour;
