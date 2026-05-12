@@ -3,36 +3,47 @@ import java.util.Random;
 class EmployeeWageBuilder {
     public static void main(String[] args) {
         System.out.println("Welcome to Employee Wage Computation Program");
-        final int employeePresent = 1;
+        final int fullTimeEmployee = 1;
         final int partTimeEmployee = 2;
         int wagePerHour = 20;
         int fullDayHour = 8;
-        int partTimeHour = 8;
-
+        int partTimeHour = 4;
+        int dailyWage = 0;
+        int workingDaysPerMonth = 20;
+        int totalEmployeeWage = 0;
         int employeeHours = 0;
-        int employeeWage = 0;
 
         Random random = new Random();
-        int employeeCheck = random.nextInt(3);
+        int employeeCheck = random.nextInt(2) + 1;
 
-        switch (employeeCheck) {
-            case employeePresent -> {
-                System.out.println("Employee is Full-Time");
-                employeeHours = fullDayHour;
-            }
-                
-            case partTimeEmployee -> {
-                System.out.println("Employee is Part-Time");
-                employeeHours = partTimeHour;
-            }
-            
-            default -> {
-                System.out.println("Employee is Absent");
-                employeeHours = 0;
-            }
+        if (employeeCheck == 1) {
+            System.out.println("Employee id Full-Time");
+        } else if (employeeCheck == 2) {
+            System.out.println("Employee is Part-Time");
         }
 
-        employeeWage = employeeHours * wagePerHour;
-        System.out.println("Daily Employee Wages : " + employeeWage);
+        for (int day = 1; day <= workingDaysPerMonth; day++) {
+            int employeePresents = random.nextInt(2);
+
+            if (employeePresents == 1) {
+                switch (employeeCheck) {
+                    case fullTimeEmployee -> {
+                        employeeHours = fullDayHour;
+                    }
+
+                    case partTimeEmployee -> {
+                        employeeHours = partTimeHour;
+                    }
+                }
+            } else {
+                employeeHours = 0;
+            }
+
+            dailyWage = employeeHours * wagePerHour;
+            totalEmployeeWage += dailyWage;
+            System.out.println("Day " + day + " Wage: " + dailyWage);
+        }
+
+        System.out.println("\nDaily Employee Wages : " + totalEmployeeWage);
     }
 }
