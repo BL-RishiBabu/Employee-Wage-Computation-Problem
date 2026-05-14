@@ -1,55 +1,70 @@
 import java.util.Random;
 
-class EmployeeWageBuilder {
+class EmpWageBuilder {
     public static final int IS_FULL_TIME = 1;
     public static final int IS_PART_TIME = 2;
-    public static final int FULL_DAY_HOUR = 8;
-    public static final int PART_TIME_HOUR = 4;
 
-    public static int computeEmployeeWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
-        
-        int totalEmployeeHours = 0;
+    private final String company;
+    private final int empRatePerHour;
+    private final int numOfWorkingDays;
+    private final int maxHoursPerMonth;
+    private int totalEmpWage;
+
+    public EmpWageBuilder(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
+        this.company = company;
+        this.empRatePerHour = empRatePerHour;
+        this.numOfWorkingDays = numOfWorkingDays;
+        this.maxHoursPerMonth = maxHoursPerMonth;
+    }
+
+    public void computeEmpWage() {
+        int totalEmpHrs = 0;
         int totalWorkingDays = 0;
-        int totalEmployeeWage = 0;
-
         Random random = new Random();
-        int employeeCheck = random.nextInt(2) + 1;
 
-        System.out.println("\n--- Computing Wage for Company: " + company + " ---");
-        System.out.println("Employee Type: " + (employeeCheck == IS_FULL_TIME ? "Full-Time" : "Part-Time"));
+        int empCheck = random.nextInt(2) + 1;
 
-        while (totalEmployeeHours < maxHoursPerMonth && totalWorkingDays < numOfWorkingDays) {
+        while (totalEmpHrs < maxHoursPerMonth && totalWorkingDays < numOfWorkingDays) {
             totalWorkingDays++;
-            int employeeHours = 0;
-            int employeePresents = random.nextInt(2);
+            int empHrs = 0;
+            int empPresence = random.nextInt(2);
 
-            if (employeePresents == 1) {
-                switch (employeeCheck) {
-                    case IS_FULL_TIME -> employeeHours = FULL_DAY_HOUR;
-                    case IS_PART_TIME -> employeeHours = PART_TIME_HOUR;
+            if (empPresence == 1) {
+                switch (empCheck) {
+                    case IS_FULL_TIME -> empHrs = 8;
+                    case IS_PART_TIME -> empHrs = 4;
                 }
             }
 
-            if (totalEmployeeHours + employeeHours > maxHoursPerMonth) {
-                employeeHours = maxHoursPerMonth - totalEmployeeHours;
+            if (totalEmpHrs + empHrs > maxHoursPerMonth) {
+                empHrs = maxHoursPerMonth - totalEmpHrs;
             }
 
-            totalEmployeeHours += employeeHours;
-            int dailyWage = employeeHours * empRatePerHour;
-            totalEmployeeWage += dailyWage;
+            totalEmpHrs += empHrs;
         }
 
-        System.out.println("Total Days Worked: " + totalWorkingDays);
-        System.out.println("Total Hours Worked: " + totalEmployeeHours);
-        System.out.println("Total Monthly Wage for " + company + ": " + totalEmployeeWage);        
-        return totalEmployeeWage;
+        this.totalEmpWage = totalEmpHrs * empRatePerHour;
+    }
+
+    @Override
+    public String toString() {
+        return "Total Monthly Wage for Company: " + company + " is " + totalEmpWage;
     }
 
     public static void main(String[] args) {
         System.out.println("Welcome to Employee Wage Computation Program");
-        
-        computeEmployeeWage("D-Mart", 20, 20, 100);
-        computeEmployeeWage("Reliance", 25, 22, 120);
-        computeEmployeeWage("Amazon", 30, 25, 150);
+
+        EmpWageBuilder dmart = new EmpWageBuilder("D-Mart", 20, 20, 100);
+        EmpWageBuilder reliance = new EmpWageBuilder("Reliance", 25, 22, 120);
+        EmpWageBuilder amazon = new EmpWageBuilder("Amazon", 30, 25, 150);
+
+        dmart.computeEmpWage();
+        System.out.println(dmart);
+
+        reliance.computeEmpWage();
+        System.out.println(reliance);
+
+        amazon.computeEmpWage();
+        System.out.println(amazon);
     }
 }
