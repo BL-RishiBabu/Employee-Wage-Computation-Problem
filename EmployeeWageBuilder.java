@@ -1,5 +1,10 @@
 import java.util.Random;
 
+interface IComputeEmpWage {
+    void addCompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth);
+    void computeEmpWage();
+}
+
 class CompanyEmpWage {
     public final String company;
     public final int empRatePerHour;
@@ -24,7 +29,7 @@ class CompanyEmpWage {
     }
 }
 
-public class EmployeeWageBuilder {
+public class EmployeeWageBuilder implements IComputeEmpWage {
     public static final int IS_FULL_TIME = 1;
     public static final int IS_PART_TIME = 2;
 
@@ -35,11 +40,13 @@ public class EmployeeWageBuilder {
         companyEmpWageArray = new CompanyEmpWage[5];
     }
 
+    @Override
     public void addCompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
         companyEmpWageArray[numOfCompany] = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
         numOfCompany++;
     }
 
+    @Override
     public void computeEmpWage() {
         for (int i = 0; i < numOfCompany; i++) {
             companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(companyEmpWageArray[i]));
@@ -76,7 +83,7 @@ public class EmployeeWageBuilder {
     public static void main(String[] args) {
         System.out.println("Welcome to Employee Wage Computation Program");
         
-        EmployeeWageBuilder empWageBuilder = new EmployeeWageBuilder();
+        IComputeEmpWage empWageBuilder = new EmployeeWageBuilder();
         empWageBuilder.addCompanyEmpWage("D-Mart", 20, 20, 100);
         empWageBuilder.addCompanyEmpWage("Reliance", 25, 22, 120);
         empWageBuilder.addCompanyEmpWage("Amazon", 30, 25, 150);
