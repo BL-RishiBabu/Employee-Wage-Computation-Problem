@@ -1,10 +1,13 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 interface IComputeEmpWage {
     void addCompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth);
     void computeEmpWage();
+    int getTotalWage(String company);
 }
 
 class CompanyEmpWage {
@@ -29,7 +32,7 @@ class CompanyEmpWage {
 
     @Override
     public String toString() {
-        return "Company: " + company + "\nDaily Wages: " + dailyWages + "\nTotal Monthly Wage: " + totalEmpWage + "\n";
+        return "Company: " + company + " | Total Wage: " + totalEmpWage;
     }
 }
 
@@ -38,15 +41,18 @@ public class EmployeeWageBuilder implements IComputeEmpWage {
     public static final int IS_PART_TIME = 2;
 
     private List<CompanyEmpWage> companyEmpWageList;
+    private Map<String, CompanyEmpWage> companyToWageMap;
 
     public EmployeeWageBuilder() {
         companyEmpWageList = new ArrayList<>();
+        companyToWageMap = new HashMap<>();
     }
 
     @Override
     public void addCompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
         CompanyEmpWage companyEmpWage = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
         companyEmpWageList.add(companyEmpWage);
+        companyToWageMap.put(company, companyEmpWage);
     }
 
     @Override
@@ -55,6 +61,12 @@ public class EmployeeWageBuilder implements IComputeEmpWage {
             companyEmpWage.setTotalEmpWage(this.computeEmpWage(companyEmpWage));
             System.out.println(companyEmpWage);
         }
+    }
+
+    @Override
+    public int getTotalWage(String company) {
+        CompanyEmpWage companyEmpWage = companyToWageMap.get(company);
+        return (companyEmpWage != null) ? companyEmpWage.totalEmpWage : 0;
     }
 
     private int computeEmpWage(CompanyEmpWage companyEmpWage) {
@@ -93,6 +105,14 @@ public class EmployeeWageBuilder implements IComputeEmpWage {
         empWageBuilder.addCompanyEmpWage("D-Mart", 20, 20, 100);
         empWageBuilder.addCompanyEmpWage("Reliance", 25, 22, 120);
         empWageBuilder.addCompanyEmpWage("Amazon", 30, 25, 150);
+        
         empWageBuilder.computeEmpWage();
+
+        System.out.println("\n--- Querying Total Wage by Company ---");
+        String queryCompany = "D-Mart";
+        System.out.println("Total Wage for " + queryCompany + ": " + empWageBuilder.getTotalWage(queryCompany));
+        
+        queryCompany = "Amazon";
+        System.out.println("Total Wage for " + queryCompany + ": " + empWageBuilder.getTotalWage(queryCompany));
     }
 }
